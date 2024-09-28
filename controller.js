@@ -58,8 +58,8 @@ export async function getUserLog(req, res) {
         }
     }
     else {
-        const from_ = new Date(req.query.from);
-        const to_ = new Date(req.query.from);
+        const from_ = (req.query.from)?new Date(req.query.from) : null;
+        const to_ = (req.query.to)?new Date(req.query.to) : null;
         const limit_ = req.query.limit;
         try {
             const user = await getUserById(req.params._id);
@@ -72,11 +72,10 @@ export async function getUserLog(req, res) {
                         return log.date >= from_;
                     else if (to_)
                         return log.date <= to_;
-                    return false;
                 })
             }
             if (limit_) {
-                filterdLogs.splice(3);
+                filterdLogs.splice(limit_);
             }
             res.json({
                 _id: user._id,
